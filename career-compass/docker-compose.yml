@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: career-compass-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: career_compass
+      POSTGRES_USER: career_compass
+      POSTGRES_PASSWORD: career_compass_local_pw
+    ports:
+      - "5432:5432"
+    volumes:
+      - career_compass_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U career_compass"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    container_name: career-compass-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: career_compass
+      DB_USERNAME: career_compass
+      DB_PASSWORD: career_compass_local_pw
+      DB_SSL_PARAMS: ""
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      JWT_SECRET: ${JWT_SECRET:-change-this-to-a-long-random-secret-in-production}
+      MAIL_HOST: ${MAIL_HOST:-smtp-relay.brevo.com}
+      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_FROM: ${MAIL_FROM:-noreply@careercompass.dev}
+      PORT: 8080
+    ports:
+      - "8080:8080"
+
+volumes:
+  career_compass_pgdata:

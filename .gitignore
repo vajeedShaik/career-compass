@@ -1,0 +1,25 @@
+
+# Secrets
+.env
+**/.env
+!.env.example
+
+# Java
+**/target/
+*.class
+
+# React
+**/node_modules/
+**/dist/
+**/coverage/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Logs and OS
+*.log
+.DS_Store
+Thumbs.db
+~

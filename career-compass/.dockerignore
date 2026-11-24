@@ -1,0 +1,10 @@
+target/
+.idea/
+*.iml
+.git/
+.gitignore
+.env
+.testcontainers.properties
+README.md
+DEPLOYMENT.md
+*.log
