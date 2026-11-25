@@ -70,6 +70,6 @@ springdoc:
 
 logging:
   level:
-    org.springframework.beans.factory.support: TRACE
-    org.springframework.context.annotation: DEBUG
-    com.careercompass: DEBUG
+    root: WARN
+    org.springframework: WARN
+    com.careercompass: INFO

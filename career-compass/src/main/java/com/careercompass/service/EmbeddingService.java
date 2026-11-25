@@ -54,13 +54,16 @@ public class EmbeddingService {
     @PostConstruct
     public void init() throws IOException, OrtException {
         env = OrtEnvironment.getEnvironment();
+        Path modelPath = extractToTempFile(
+                MODEL_ONNX_CLASSPATH,
+                "onnx-model",
+                ".onnx"
+        );
 
-        byte[] modelBytes;
-        try (InputStream in = new ClassPathResource(MODEL_ONNX_CLASSPATH).getInputStream()) {
-            modelBytes = in.readAllBytes();
-        }
-        session = env.createSession(modelBytes, new OrtSession.SessionOptions());
-
+        session = env.createSession(
+                modelPath.toString(),
+                new OrtSession.SessionOptions()
+        );
         Path tokenizerPath = extractToTempFile(TOKENIZER_CLASSPATH, "tokenizer", ".json");
         tokenizer = HuggingFaceTokenizer.builder()
                 .optTokenizerPath(tokenizerPath)
